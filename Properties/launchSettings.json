@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Lab1_OOP_Bradul (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Lab1_OOP_Bradul (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
