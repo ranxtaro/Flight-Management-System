@@ -21,32 +21,22 @@ namespace Lab1_OOP_Bradul
             this.InitializeComponent();
         }
 
-
-        // ==========================================
         // MAXIMUM NUMBER OF OBJECTS
-        // ==========================================
 
         private async void RootGrid_Loaded(
-            object sender,
-            RoutedEventArgs e)
+    object sender,
+    RoutedEventArgs e)
         {
             if (maxFlights > 0)
                 return;
 
-
-            NumberBox limitBox = new NumberBox
+            TextBox limitBox = new TextBox
             {
                 Header = "Maximum number of flights",
-                Minimum = 1,
-                Value = 10,
-
-                SpinButtonPlacementMode =
-                    NumberBoxSpinButtonPlacementMode.Compact
+                PlaceholderText = "Enter a positive whole number"
             };
 
-
             TextBlock errorText = CreateErrorText();
-
 
             StackPanel panel = new StackPanel
             {
@@ -56,14 +46,12 @@ namespace Lab1_OOP_Bradul
             panel.Children.Add(
                 new TextBlock
                 {
-                    Text =
-                        "Enter how many Flight objects the program can store.",
+                    Text = "Enter how many Flight objects the program can store.",
                     TextWrapping = TextWrapping.Wrap
                 });
 
             panel.Children.Add(limitBox);
             panel.Children.Add(errorText);
-
 
             ContentDialog dialog = new ContentDialog
             {
@@ -74,33 +62,34 @@ namespace Lab1_OOP_Bradul
                 XamlRoot = RootGrid.XamlRoot
             };
 
-
             dialog.PrimaryButtonClick +=
                 (dialogSender, args) =>
                 {
                     errorText.Text = "";
 
-
-                    if (double.IsNaN(limitBox.Value) ||
-                        limitBox.Value <= 0 ||
-                        limitBox.Value % 1 != 0)
+                    if (!int.TryParse(limitBox.Text.Trim(), out int number))
                     {
                         errorText.Text =
-                            "Enter a positive whole number.";
+                            "The limit must be a whole number.";
 
                         args.Cancel = true;
                         return;
                     }
 
+                    if (number <= 0)
+                    {
+                        errorText.Text =
+                            "The limit must be greater than 0.";
 
-                    maxFlights =
-                        (int)limitBox.Value;
+                        args.Cancel = true;
+                        return;
+                    }
+
+                    maxFlights = number;
                 };
-
 
             ContentDialogResult result =
                 await dialog.ShowAsync();
-
 
             if (result == ContentDialogResult.Primary &&
                 maxFlights > 0)
@@ -115,9 +104,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // ADD FLIGHT
-        // ==========================================
 
         private async void AddFlightButton_Click(
             object sender,
@@ -270,12 +257,12 @@ namespace Lab1_OOP_Bradul
 
                     // Flight number
 
+                
+
                     string flightNumber =
                         flightNumberBox.Text.Trim();
 
-
-                    if (string.IsNullOrWhiteSpace(
-                            flightNumber) ||
+                    if (string.IsNullOrWhiteSpace(flightNumber) ||
                         flightNumber.Length < 2 ||
                         flightNumber.Length > 7)
                     {
@@ -286,18 +273,40 @@ namespace Lab1_OOP_Bradul
                         return;
                     }
 
+                    if (!System.Text.RegularExpressions.Regex.IsMatch(
+                            flightNumber,
+                            @"^[A-Za-z0-9]+$"))
+                    {
+                        errorText.Text =
+                            "Flight number can contain only letters and numbers.";
+
+                        args.Cancel = true;
+                        return;
+                    }
+
 
                     // Destination
+
+               
 
                     string destination =
                         destinationBox.Text.Trim();
 
-
-                    if (string.IsNullOrWhiteSpace(
-                            destination))
+                    if (string.IsNullOrWhiteSpace(destination))
                     {
                         errorText.Text =
                             "Destination cannot be empty.";
+
+                        args.Cancel = true;
+                        return;
+                    }
+
+                    if (!System.Text.RegularExpressions.Regex.IsMatch(
+                            destination,
+                            @"^[\p{L} ]+$"))
+                    {
+                        errorText.Text =
+                            "Destination can contain only letters.";
 
                         args.Cancel = true;
                         return;
@@ -412,9 +421,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // DISPLAY FLIGHTS
-        // ==========================================
 
         private void DisplayFlights(
             List<Flight> flightsToShow)
@@ -613,9 +620,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // REFRESH ALL FLIGHTS
-        // ==========================================
 
         private void RefreshFlightList()
         {
@@ -633,9 +638,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // SEARCH
-        // ==========================================
 
         private async void SearchButton_Click(
             object sender,
@@ -730,9 +733,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // SELECT FLIGHT
-        // ==========================================
 
         private void FlightsListView_SelectionChanged(
             object sender,
@@ -756,9 +757,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // SHOW SELECTED FLIGHT
-        // ==========================================
 
         private void ShowSelectedFlight()
         {
@@ -801,9 +800,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // CLEAR SELECTED FLIGHT
-        // ==========================================
 
         private void ClearSelectedFlight()
         {
@@ -832,9 +829,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // METHOD 1 - ADD PASSENGER
-        // ==========================================
 
         private async void AddPassengerButton_Click(
             object sender,
@@ -864,9 +859,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // METHOD 2 - DELAY FLIGHT
-        // ==========================================
 
         private async void DelayFlightButton_Click(
             object sender,
@@ -930,9 +923,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // METHOD 3 - START BOARDING
-        // ==========================================
 
         private void StartBoardingButton_Click(
             object sender,
@@ -951,9 +942,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // METHOD 4 - CANCEL FLIGHT
-        // ==========================================
 
         private void CancelFlightButton_Click(
             object sender,
@@ -972,9 +961,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // DELETE
-        // ==========================================
 
         private async void DeleteFlightButton_Click(
             object sender,
@@ -1242,9 +1229,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // EXIT
-        // ==========================================
 
         private void ExitButton_Click(
             object sender,
@@ -1254,9 +1239,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // HELPER - TABLE CELL
-        // ==========================================
 
         private TextBlock CreateCell(
             string text,
@@ -1301,9 +1284,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // HELPER - ERROR TEXT
-        // ==========================================
 
         private TextBlock CreateErrorText()
         {
@@ -1323,9 +1304,7 @@ namespace Lab1_OOP_Bradul
         }
 
 
-        // ==========================================
         // HELPER - MESSAGE
-        // ==========================================
 
         private async System.Threading.Tasks.Task
             ShowMessage(

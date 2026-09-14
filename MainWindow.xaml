@@ -54,11 +54,7 @@
 
                     </StackPanel>
 
-                    <TextBlock
-                        Margin="52,4,0,0"
-                        Text="Airport flight management"
-                        FontSize="14"
-                        Foreground="#8492A6"/>
+                    
 
                 </StackPanel>
 
